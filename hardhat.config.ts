@@ -25,16 +25,17 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
+    ethereum: {
+      url: process.env.ETHEREUM_URL || "",
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-    hardhat: {
-      forking: {
-        url: "https://speedy-nodes-nyc.moralis.io/87c6546b69c906736e876ef6/eth/mainnet/archive",
-      }
-    }  
+    // ethereum: {
+    //   forking: {
+    //     url: "https://speedy-nodes-nyc.moralis.io/87c6546b69c906736e876ef6/eth/mainnet/archive",
+
+    //   }
+    // }  
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
