@@ -17,7 +17,9 @@ import "./IERC20.sol";
 // // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 
 contract StakeContract{
-
+            event Withdrawal(address, uint256, uint256);
+            event AddStack(address, uint256, uint256);
+            
             struct Stake{
             uint256 timeStaked;
             uint256 amount;
@@ -61,6 +63,7 @@ contract StakeContract{
                 stake.status = true;
 
             }
+            emit AddStack(msg.sender, _amount, stake.timeStaked);
         }
 
      function calInterest(address _address) view public returns (uint256){
@@ -76,22 +79,31 @@ contract StakeContract{
     return interest;
     }
 
-
-
    function withdraw(uint256 _amount) external {
-         Stake storage withdraw = stakers[msg.sender];
+         Stake storage stake = stakers[msg.sender];
+        uint256 daysSpent = block.timestamp - stake.timeStaked;
+
+        if(daysSpent > minStakeTime){
         uint256 reward =  calInterest(msg.sender);
-        uint256 daysSpent = block.timestamp - withdraw.timeStaked;
-        if(daysSpent > 3 days){
-            withdraw.amount += reward;
+           uint256 total =  stake.amount + reward;
+            // check that amont requested is lesser or equal total balance
+           require(total >= _amount, "Insufficient fund");
+            stake.amount = total - _amount;
+            stake.timeStaked = block.timestamp;
+        }else{
+  // if daysSpent is greater than minStakeTime and you try to withdraw , withdraw that amount and then compound your interest else give the withdrawl d amount he wnt to withdraw
+        require(stake.amount >= _amount, "Insufficient fund");
+        stake.amount = stake.amount - _amount;
+        stake.timeStaked = block.timestamp;
         }
-        require(withdraw.amount >= _amount, "Insufficient fund");
-        // transfer(msg.sender, _amount);
-        withdraw.amount -= _amount;
+        Token.transfer(msg.sender, _amount);
+        stake.status = true;
+        stake.timeStaked = block.timestamp;
+    emit Withdrawal(msg.sender, _amount, stake.timeStaked);
+      
     } 
 
 
 
+
 }
-
-
