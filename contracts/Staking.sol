@@ -97,7 +97,7 @@ contract StakeContract{
         stake.timeStaked = block.timestamp;
         }
         Token.transfer(msg.sender, _amount);
-        stake.status = true;
+        stake.amount > 0? stake.status = true : stake.status = false;
         stake.timeStaked = block.timestamp;
     emit Withdrawal(msg.sender, _amount, stake.timeStaked);
       
