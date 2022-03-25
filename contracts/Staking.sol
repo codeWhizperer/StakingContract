@@ -16,7 +16,7 @@ import "./IERC20.sol";
 
 // // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 
-contract StakeContract is ERC20 {
+contract StakeContract{
 
             struct Stake{
             uint256 timeStaked;
@@ -24,17 +24,26 @@ contract StakeContract is ERC20 {
             address staker;
             bool status;
         }  
+
+        address boredApeAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D;
+
+        IERC721 BoredApeToken = IERC721(boredApeAddress);
+        IERC20 Token = IERC20(boredApeAddress);
         mapping(address =>Stake ) public stakers;
         // uint256 minStakeTime = 5 seconds;
         uint256 minStakeTime = 3 days;
+     
+        // uint256 minStakeTime = 3 days;
         function stakeToken(uint256 _amount) external {
-            require(boredApes.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
+            require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
             // transfer token to BoredAPE OWNER
-            BAPTOKEN.transferFrom(msg.sender, address(this), _amount);
-            require(BAPTOKEN.balanceOf(msg.sender) >= _amount, "insuffient fund");
+            Token.transferFrom(msg.sender, address(this), _amount);
+            require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
             Stake storage stake = stakers[msg.sender];
             if(stake.status == true){
-                if(stake.timeStaked > minStakeTime){
+                uint256 daysSpent = block.timestamp - stake.timeStaked;
+                if(daysSpent > minStakeTime){
+                    require(daysSpent > minStakeTime, "ogbeni");
                     uint256 interest = calInterest(msg.sender);
                     stake.amount += interest;
                     stake.amount += _amount;
@@ -68,13 +77,19 @@ contract StakeContract is ERC20 {
     }
 
 
-//    unction withdraw() external {
-//         // withdraw reward
 
-//         // withdraw stake
+   function withdraw(uint256 _amount) external {
+         Stake storage withdraw = stakers[msg.sender];
+        uint256 reward =  calInterest(msg.sender);
+        uint256 daysSpent = block.timestamp - withdraw.timeStaked;
+        if(daysSpent > 3 days){
+            withdraw.amount += reward;
+        }
+        require(withdraw.amount >= _amount, "Insufficient fund");
+        // transfer(msg.sender, _amount);
+        withdraw.amount -= _amount;
+    } 
 
-//         // withdraw all
-//     } f
 
 
 }
