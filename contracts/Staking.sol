@@ -28,19 +28,20 @@ contract StakeContract{
         }  
 
         address boredApeAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D;
+        address tokenDeployedAddress = 0xEd4E1f3f9ad315288705713BF3105E2d9976Aa3a;
 
         IERC721 BoredApeToken = IERC721(boredApeAddress);
-        IERC20 Token = IERC20(boredApeAddress);
+        IERC20 Token = IERC20(tokenDeployedAddress);
+
         mapping(address =>Stake ) public stakers;
         // uint256 minStakeTime = 5 seconds;
         uint256 minStakeTime = 3 days;
-     
-        // uint256 minStakeTime = 3 days;
         function stakeToken(uint256 _amount) external {
             require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
             // transfer token to BoredAPE OWNER
-            Token.transferFrom(msg.sender, address(this), _amount);
             require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
+            // transfer to boredowner first from the deploy ERC
+            Token.transferFrom(msg.sender, address(this), _amount);
             Stake storage stake = stakers[msg.sender];
             if(stake.status == true){
                 uint256 daysSpent = block.timestamp - stake.timeStaked;
@@ -97,8 +98,8 @@ contract StakeContract{
         stake.timeStaked = block.timestamp;
         }
         Token.transfer(msg.sender, _amount);
-        stake.amount > 0? stake.status = true : stake.status = false;
         stake.timeStaked = block.timestamp;
+        stake.amount > 0? stake.status = true : stake.status = false;
     emit Withdrawal(msg.sender, _amount, stake.timeStaked);
       
     } 
