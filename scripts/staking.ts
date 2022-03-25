@@ -1,8 +1,11 @@
 import {ethers} from "hardhat";
 
 async function main(){
-const deployedToken = "0x4bf010f1b9beDA5450a8dD702ED602A104ff65EE";
-const contract = await ethers.getContractAt("BRT", deployedToken);
+const Contract = await ethers.getContractFactory("StakeContract");
+const contract = await Contract.deploy()
+await contract.deployed()
+
+console.log(await contract.address)
 // const balance = await contract.balanceOf(deployedToken)
 
 // console.log(balance)
