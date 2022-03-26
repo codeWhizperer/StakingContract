@@ -67,7 +67,7 @@ contract StakeContract{
             emit AddStack(msg.sender, _amount, stake.timeStaked);
         }
 
-     function calInterest(address _address) view public returns (uint256){
+     function calInterest(address _address) view internal returns (uint256){
     Stake memory stake = stakers[_address];
     if (stake.status==false){
         return 0;
