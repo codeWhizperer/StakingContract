@@ -7,7 +7,7 @@ import "./IERC20.sol";
 
 
 // // -when people stake brt, they 10% of it per month provided they have staked for 3 days or more.
-// // IMPORTANT: Only BoREDaPES OWNERS CAN USE YOUR CONTRACT WITH
+// // IMPORTANT: Only BOREDAPES OWNERS CAN USE YOUR CONTRACT WITH
 // // BOREDAPES NFT:
 // // Write  a staking contract that accepts an erc20 token called boredApeToken(created by you,18 decimasls)
 
@@ -38,7 +38,7 @@ contract StakeContract{
         uint256 minStakeTime = 3 days;
         function stakeToken(uint256 _amount) external {
             require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
-            // transfer token to BoredAPE OWNER
+            // transfer token to BoredAPE OWNER;
             require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
             // transfer to boredowner first from the deploy ERC
             Token.transferFrom(msg.sender, address(this), _amount);
@@ -46,9 +46,9 @@ contract StakeContract{
             if(stake.status == true){
                 uint256 daysSpent = block.timestamp - stake.timeStaked;
                 if(daysSpent > minStakeTime){
-                    require(daysSpent > minStakeTime, "ogbeni");
-                    uint256 interest = calInterest(msg.sender);
-                    stake.amount += interest;
+                    // require(daysSpent > minStakeTime, "Maturity not yet reached!!");
+                    uint256 reward = calculateReward(msg.sender);
+                    stake.amount += reward;
                     stake.amount += _amount;
                     stake.timeStaked = block.timestamp;
                 }
@@ -67,33 +67,19 @@ contract StakeContract{
             emit AddStack(msg.sender, _amount, stake.timeStaked);
         }
 
-     function calInterest(address _address) view internal returns (uint256){
-    Stake memory stake = stakers[_address];
-    if (stake.status==false){
-        return 0;
-    }
-    uint256 secondsInDay = 86400;
-    // uint256 secondsInDay = 5;
-    uint256 daysSpent = block.timestamp - stake.timeStaked;
-    // uint256 interest = ((daysSpent/secondsInDay) / 300) * _stakes ;
-    uint256 interest = (daysSpent * stake.amount)/(secondsInDay*300);
-    return interest;
-    }
-
    function withdraw(uint256 _amount) external {
          Stake storage stake = stakers[msg.sender];
         uint256 daysSpent = block.timestamp - stake.timeStaked;
+           require(_amount <= stake.amount, "Insufficient fund");
 
         if(daysSpent > minStakeTime){
-        uint256 reward =  calInterest(msg.sender);
-           uint256 total =  stake.amount + reward;
-            // check that amont requested is lesser or equal total balance
-           require(total >= _amount, "Insufficient fund");
-            stake.amount = total - _amount;
+        uint256 reward =  calculateReward(msg.sender);
+           stake.amount +=   reward;
+            // check that amount requested is lesser or equal total balance
+            stake.amount -=  _amount;
             stake.timeStaked = block.timestamp;
         }else{
   // if daysSpent is greater than minStakeTime and you try to withdraw , withdraw that amount and then compound your interest else give the withdrawl d amount he wnt to withdraw
-        require(stake.amount >= _amount, "Insufficient fund");
         stake.amount = stake.amount - _amount;
         stake.timeStaked = block.timestamp;
         }
@@ -104,7 +90,30 @@ contract StakeContract{
       
     } 
 
+//   @dev Calculate Reward per seconds
 
+ uint rewardInSecond =2592000;
+    
+    function calculateReward(address _address) public view returns (uint256 reward){
+       Stake storage stake  = stakers[_address];
+        if (stake.status==false){
+        return 0;
+    }
+       uint256 perMonth = (stake.amount * 10);
+       uint256 time = block.timestamp - stake.timeStaked;
+       reward = (perMonth * time* 1000) /(rewardInSecond);
+    }
+
+
+function getBalance() external view returns (uint){
+Stake memory stake = stakers[msg.sender];
+return stake.amount;
+}
+
+function getStakeDetailsByAddress(address _address) external view returns (Stake memory){
+    Stake memory stake = stakers[_address];
+    return stake;
+}
 
 
 }
