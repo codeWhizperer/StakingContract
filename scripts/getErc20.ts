@@ -10,10 +10,10 @@ const signer = await ethers.getSigner(WALLETOWNER);
 
 const ERC20 = await ethers.getContractAt("BAPTOKEN",DEPLOYEDBAP20)
 console.log(await ERC20.balanceOf(WALLETOWNER))
-//  await ERC20.connect(signer).transfer(BOREDAPEOWNER, 1000000000000000)
-// console.log(await ERC20.balanceOf(BOREDAPEOWNER))
+ await ERC20.connect(signer).transfer(BOREDAPEOWNER, "1000000000000000000")
+console.log(await ERC20.balanceOf(BOREDAPEOWNER))
 
-
+// 30000000000000000000
 }
 
 main().catch((error) => {
