@@ -1,4 +1,4 @@
-# Staking Contract with BoredApe NFT WhiteListing
+# BRT Staking Contract
 
     BRT STAKE is a Staking Contract project which enables people to stake  with BRT Token and earn 10% interest  monthly on their stake. Stakers can only claim reward when they have staked for more than 3 days.
     
