@@ -27,17 +27,17 @@ contract StakeContract{
             bool status;
         }  
 
-        address boredApeAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D;
+        // address boredApeAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D;
         address tokenDeployedAddress = 0xEd4E1f3f9ad315288705713BF3105E2d9976Aa3a;
 
-        IERC721 BoredApeToken = IERC721(boredApeAddress);
+        // IERC721 BoredApeToken = IERC721(boredApeAddress);
         IERC20 Token = IERC20(tokenDeployedAddress);
 
         mapping(address =>Stake ) public stakers;
         // uint256 minStakeTime = 5 seconds;
         uint256 minStakeTime = 3 days;
         function stakeToken(uint256 _amount) external {
-            require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
+            // require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
             // transfer token to BoredAPE OWNER;
             require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
             // transfer to boredowner first from the deploy ERC

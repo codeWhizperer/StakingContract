@@ -1,11 +1,42 @@
 # Staking Contract with BoredApe NFT WhiteListing
 
- BoredApe NFT WhiteListing is a Staking Contract project which enables boredApe Owners to stake to stake with BRT Token and earn 10% interest  monthly on their stake. 
+    BRT STAKE is a Staking Contract project which enables people to stake  with BRT Token and earn 10% interest  monthly on their stake. Stakers can only claim reward when they have staked for more than 3 days.
+    
+    The reward of stakes is calculated in seconds via the formular;
+    
+    Reward = TimeSpent * interestPerSeconds * amount; 
 
-A staking contract that accepts an erc20 token called boredApeToken(created by you,18 decimasls)
 
-// // - When people stake brt, they 10% of it per month provided they have staked for 3 days or more
-// // - IMPORTANT: Only BoredApes owners can use your contract
+    Commands:
+    To clone project:
+    git clone https://github.com/Adegbite1999/boredApeStakingContract.git
 
-// // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
+    -Install Dependencies:
+     npm install
+
+
+
+    File Structure:
+
+    There are three files in the contract viz
+    IERC20.sol contains functions to mint BRT Token
+    IERC721.sol contains interface to interact with ERC721 contract
+    Staking.sol contain the logic for the project.
+
+
+ <!-- Scripts -->
+    Project scripts are deploy.ts, getErc20.ts, staking.ts, testStake.ts
+    deploy.ts: To deploy the ERC20 TOKEN
+    getErc20.ts: script to interact with deployed ERC20 contract
+    staking.ts: deploys the staking contract
+    testStake.ts: script to interact with deployed staking contract.
+
+    <!-- To test script on forked network -->
+     This project utilized hardhat `mainnet forking` for testing in local environment
+
+    step1: Click on the link https://admin.moralis.io/speedyNodes to copy a network to be utilized for testing
+    step2: run the command npx hardhat node --fork <network>, this gets the snapshot of the network url you copied from moralis.
+    step3: To test the scripts, run the command npx hardhat run scrpts/ <script> --network localhost
+
+    
 
