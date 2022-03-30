@@ -1,6 +1,11 @@
 # Staking Contract with BoredApe NFT WhiteListing
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+ BoredApe NFT WhiteListing is a Staking Contract project which enables boredApe Owners to stake to stake with BRT Token and earn 10% interest  monthly on their stake. 
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+A staking contract that accepts an erc20 token called boredApeToken(created by you,18 decimasls)
+
+// // - When people stake brt, they 10% of it per month provided they have staked for 3 days or more
+// // - IMPORTANT: Only BoredApes owners can use your contract
+
+// // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 

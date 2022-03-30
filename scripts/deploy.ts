@@ -17,7 +17,7 @@ async function main() {
     WALLETOWNER,
     "0x2000000000000000000"
   ]);
-  const totalSupply = 2000;
+  const totalSupply = 30;
 // const balance = await ethers.provider.getBalance(WALLETOWNER);
 // console.log(balance)
 //to stop impersonatinig 
@@ -29,7 +29,7 @@ async function main() {
    await tokenDeploy.deployed()
   console.log("Deployed token address:",tokenDeploy.address)
   const ownerBalance = await ethers.provider.getBalance(WALLETOWNER)
-  console.log("Owner balance:", ownerBalance)
+  // console.log("Owner balance:", ownerBalance)
 
 }
 
