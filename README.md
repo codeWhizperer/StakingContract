@@ -37,5 +37,6 @@
     step2: run the command npx hardhat node --fork <network>, this gets the snapshot of the network url you copied from moralis.
     step3: To test the scripts, run the command npx hardhat run scrpts/ <script> --network localhost
 
-    
-
+    BRT TOKEN was deployed on rinkeby test network.
+    Deployed BRT TOKEN CONTRACT:0xD0998d596E49F827fDBeb4f40aF29013354969B9
+    Link to  verified token: https://rinkeby.etherscan.io/address/0xD0998d596E49F827fDBeb4f40aF29013354969B9#code
