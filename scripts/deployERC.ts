@@ -15,7 +15,7 @@ async function main() {
   const tokenDeploy = await Token.connect(signer).deploy(totalSupply)
    await tokenDeploy.deployed()
   console.log("Deployed token address:",tokenDeploy.address)
-
+return  tokenDeploy.address
 }
 
 

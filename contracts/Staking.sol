@@ -17,26 +17,23 @@ import "./IERC20.sol";
 // // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 
 contract StakeContract{
-            event Withdrawal(address, uint256, uint256);
-            event AddStack(address, uint256, uint256);
+            event Withdrawal(address, uint208, uint40);
+            event AddStack(address, uint208, uint40);
             
             struct Stake{
-            uint256 timeStaked;
-            uint256 amount;
-            address staker;
+            uint40 timeStaked;
+            uint208 amount;
             bool status;
         }  
 
-        // address boredApeAddress = 0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D;
-        address tokenDeployedAddress = 0xEd4E1f3f9ad315288705713BF3105E2d9976Aa3a;
+        address tokenDeployedAddress = 0xefbE878bdef9596E54F53bfe5E28Aa4C6b2D4994;
 
         // IERC721 BoredApeToken = IERC721(boredApeAddress);
         IERC20 Token = IERC20(tokenDeployedAddress);
 
         mapping(address =>Stake ) public stakers;
-        // uint256 minStakeTime = 5 seconds;
-        uint256 minStakeTime = 3 days;
-        function stakeToken(uint256 _amount) external {
+        uint40 minStakeTime = 3 days;
+        function stakeToken(uint208 _amount) external {
             // require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
             // transfer token to BoredAPE OWNER;
             require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
@@ -44,47 +41,47 @@ contract StakeContract{
             Token.transferFrom(msg.sender, address(this), _amount);
             Stake storage stake = stakers[msg.sender];
             if(stake.status == true){
-                uint256 daysSpent = block.timestamp - stake.timeStaked;
+                uint40 daysSpent = uint40(block.timestamp) - stake.timeStaked;
                 if(daysSpent > minStakeTime){
                     // require(daysSpent > minStakeTime, "Maturity not yet reached!!");
-                    uint256 reward = calculateReward(msg.sender);
+                    uint208 reward = calculateReward(msg.sender);
                     stake.amount += reward;
                     stake.amount += _amount;
-                    stake.timeStaked = block.timestamp;
+                    stake.timeStaked = uint40(block.timestamp);
                 }
                 else {
                     stake.amount += _amount;
-                    stake.timeStaked = block.timestamp;
+                    stake.timeStaked = uint40(block.timestamp);
                 }
             }
             else {
-                stake.timeStaked = block.timestamp;
+                stake.timeStaked = uint40(block.timestamp);
                 stake.amount = _amount;
-                stake.staker = msg.sender;
+                // stake.staker = msg.sender;
                 stake.status = true;
 
             }
             emit AddStack(msg.sender, _amount, stake.timeStaked);
         }
 
-   function withdraw(uint256 _amount) external {
+   function withdraw(uint208 _amount) external {
          Stake storage stake = stakers[msg.sender];
-        uint256 daysSpent = block.timestamp - stake.timeStaked;
+        uint40 daysSpent = uint40(block.timestamp) - stake.timeStaked;
            require(_amount <= stake.amount, "Insufficient fund");
 
         if(daysSpent > minStakeTime){
-        uint256 reward =  calculateReward(msg.sender);
-           stake.amount +=   reward;
+        uint208 reward =  calculateReward(msg.sender);
+           stake.amount +=   uint208(reward);
             // check that amount requested is lesser or equal total balance
-            stake.amount -=  _amount;
-            stake.timeStaked = block.timestamp;
+            stake.amount -=  uint208(_amount);
+            stake.timeStaked = uint40(block.timestamp);
         }else{
   // if daysSpent is greater than minStakeTime and you try to withdraw , withdraw that amount and then compound your interest else give the withdrawl d amount he wnt to withdraw
-        stake.amount = stake.amount - _amount;
-        stake.timeStaked = block.timestamp;
+        stake.amount = stake.amount - uint208(_amount);
+        stake.timeStaked = uint40(block.timestamp);
         }
         Token.transfer(msg.sender, _amount);
-        stake.timeStaked = block.timestamp;
+        stake.timeStaked = uint40(block.timestamp);
         stake.amount > 0? stake.status = true : stake.status = false;
     emit Withdrawal(msg.sender, _amount, stake.timeStaked);
       
@@ -92,16 +89,16 @@ contract StakeContract{
 
 //   @dev Calculate Reward per seconds
 
- uint rewardInSecond =2592000;
+ uint40 rewardInSecond =2592000;
     
-    function calculateReward(address _address) public view returns (uint256 reward){
+    function calculateReward(address _address) public view returns (uint208 reward){
        Stake storage stake  = stakers[_address];
         if (stake.status==false){
         return 0;
     }
-       uint256 perMonth = (stake.amount * 10);
-       uint256 time = block.timestamp - stake.timeStaked;
-       reward = (perMonth * time* 1000) /(rewardInSecond);
+       uint208 perMonth = (stake.amount * 10);
+       uint40 time = uint40(block.timestamp) - stake.timeStaked;
+       reward = uint208((perMonth * time* 1000) /(rewardInSecond));
     }
 
 
