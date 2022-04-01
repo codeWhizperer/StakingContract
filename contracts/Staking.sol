@@ -26,7 +26,7 @@ contract StakeContract{
             bool status;
         }  
 
-        address tokenDeployedAddress = 0xefbE878bdef9596E54F53bfe5E28Aa4C6b2D4994;
+        address tokenDeployedAddress = 0xD0998d596E49F827fDBeb4f40aF29013354969B9;
 
         // IERC721 BoredApeToken = IERC721(boredApeAddress);
         IERC20 Token = IERC20(tokenDeployedAddress);
