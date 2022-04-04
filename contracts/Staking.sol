@@ -17,8 +17,8 @@ import "./IERC20.sol";
 // // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 
 contract StakeContract{
-            event Withdrawal(address, uint208, uint40);
-            event AddStack(address, uint208, uint40);
+            event Withdrawal(address _to, uint208 amount, uint40 time);
+            event AddStack(address _from, uint208 amount, uint40 time);
             
             struct Stake{
             uint40 timeStaked;

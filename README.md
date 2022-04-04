@@ -40,3 +40,7 @@
     BRT TOKEN was deployed on rinkeby test network.
     Deployed BRT TOKEN CONTRACT:0xD0998d596E49F827fDBeb4f40aF29013354969B9
     Link to  verified token: https://rinkeby.etherscan.io/address/0xD0998d596E49F827fDBeb4f40aF29013354969B9#code
+
+    Deployed Staking Contract: 0x40960D06132BBCBAA3FfA1B77d10e57C8578eF95
+    Successfully verified contract StakeContract on Etherscan.
+https://rinkeby.etherscan.io/address/0x40960D06132BBCBAA3FfA1B77d10e57C8578eF95#code
