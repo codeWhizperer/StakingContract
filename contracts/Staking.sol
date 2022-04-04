@@ -17,8 +17,8 @@ import "./IERC20.sol";
 // // BOREDAPES NFT: 0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
 
 contract StakeContract{
-            event Withdrawal(address, uint208, uint40);
-            event AddStack(address, uint208, uint40);
+            event Withdrawal(address _to, uint208 amount, uint40 time);
+            event AddStack(address _from, uint208 amount, uint40 time);
             
             struct Stake{
             uint40 timeStaked;
@@ -27,23 +27,17 @@ contract StakeContract{
         }  
 
         address tokenDeployedAddress = 0xD0998d596E49F827fDBeb4f40aF29013354969B9;
-
-        // IERC721 BoredApeToken = IERC721(boredApeAddress);
         IERC20 Token = IERC20(tokenDeployedAddress);
 
         mapping(address =>Stake ) public stakers;
         uint40 minStakeTime = 3 days;
         function stakeToken(uint208 _amount) external {
-            // require(BoredApeToken.balanceOf(msg.sender) >= 1, "Only boredApes owner can stake");
-            // transfer token to BoredAPE OWNER;
             require(Token.balanceOf(msg.sender) >= _amount, "insuffient fund");
-            // transfer to boredowner first from the deploy ERC
             Token.transferFrom(msg.sender, address(this), _amount);
             Stake storage stake = stakers[msg.sender];
             if(stake.status == true){
                 uint40 daysSpent = uint40(block.timestamp) - stake.timeStaked;
                 if(daysSpent > minStakeTime){
-                    // require(daysSpent > minStakeTime, "Maturity not yet reached!!");
                     uint208 reward = calculateReward(msg.sender);
                     stake.amount += reward;
                     stake.amount += _amount;
@@ -57,7 +51,6 @@ contract StakeContract{
             else {
                 stake.timeStaked = uint40(block.timestamp);
                 stake.amount = _amount;
-                // stake.staker = msg.sender;
                 stake.status = true;
 
             }
@@ -72,11 +65,9 @@ contract StakeContract{
         if(daysSpent > minStakeTime){
         uint208 reward =  calculateReward(msg.sender);
            stake.amount +=   uint208(reward);
-            // check that amount requested is lesser or equal total balance
             stake.amount -=  uint208(_amount);
             stake.timeStaked = uint40(block.timestamp);
         }else{
-  // if daysSpent is greater than minStakeTime and you try to withdraw , withdraw that amount and then compound your interest else give the withdrawl d amount he wnt to withdraw
         stake.amount = stake.amount - uint208(_amount);
         stake.timeStaked = uint40(block.timestamp);
         }
@@ -86,8 +77,6 @@ contract StakeContract{
     emit Withdrawal(msg.sender, _amount, stake.timeStaked);
       
     } 
-
-//   @dev Calculate Reward per seconds
 
  uint40 rewardInSecond =2592000;
     
